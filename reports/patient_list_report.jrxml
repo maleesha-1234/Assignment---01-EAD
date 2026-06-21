@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="patient_list_report"
+              pageWidth="595" pageHeight="842"
+              columnWidth="535" leftMargin="30" rightMargin="30"
+              topMargin="20" bottomMargin="20"
+              whenNoDataType="AllSectionsNoDetail">
+
+    <queryString>
+        <![CDATA[SELECT patient_id, first_name, last_name, date_of_birth, gender, contact_number, blood_group, medical_history FROM patients ORDER BY first_name]]>
+    </queryString>
+
+    <field name="patient_id"     class="java.lang.Integer"/>
+    <field name="first_name"     class="java.lang.String"/>
+    <field name="last_name"      class="java.lang.String"/>
+    <field name="date_of_birth"  class="java.sql.Date"/>
+    <field name="gender"         class="java.lang.String"/>
+    <field name="contact_number" class="java.lang.String"/>
+    <field name="blood_group"    class="java.lang.String"/>
+    <field name="medical_history" class="java.lang.String"/>
+
+    <variable name="totalPatients" class="java.lang.Integer" calculation="Count">
+        <variableExpression><![CDATA[$F{patient_id}]]></variableExpression>
+    </variable>
+
+    <title>
+        <band height="60">
+            <rectangle><reportElement x="0" y="0" width="535" height="60" backcolor="#1E3C72"/></rectangle>
+            <staticText>
+                <reportElement x="0" y="10" width="535" height="30" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Center"><font fontName="Arial" size="16" isBold="true"/></textElement>
+                <text><![CDATA[PATIENT LIST REPORT]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="40" width="535" height="16" forecolor="#AADDFF"/>
+                <textElement textAlignment="Center"><font fontName="Arial" size="10"/></textElement>
+                <text><![CDATA[Clinic Management System | EAD-1 Coursework | NIBM 25.1P]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="24">
+            <rectangle><reportElement x="0" y="0" width="535" height="24" backcolor="#2C3E50"/></rectangle>
+            <staticText><reportElement x="0"   y="4" width="30"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[ID]]></text></staticText>
+            <staticText><reportElement x="30"  y="4" width="90"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[First Name]]></text></staticText>
+            <staticText><reportElement x="120" y="4" width="90"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Last Name]]></text></staticText>
+            <staticText><reportElement x="210" y="4" width="80"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Date of Birth]]></text></staticText>
+            <staticText><reportElement x="290" y="4" width="60"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Gender]]></text></staticText>
+            <staticText><reportElement x="350" y="4" width="80"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Contact]]></text></staticText>
+            <staticText><reportElement x="430" y="4" width="50"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Blood Grp]]></text></staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="20">
+            <textField><reportElement x="0"   y="2" width="30"  height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{patient_id}]]></textFieldExpression></textField>
+            <textField><reportElement x="30"  y="2" width="90"  height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{first_name}]]></textFieldExpression></textField>
+            <textField><reportElement x="120" y="2" width="90"  height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{last_name}]]></textFieldExpression></textField>
+            <textField><reportElement x="210" y="2" width="80"  height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{date_of_birth}]]></textFieldExpression></textField>
+            <textField><reportElement x="290" y="2" width="60"  height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression></textField>
+            <textField isBlankWhenNull="true"><reportElement x="350" y="2" width="80" height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{contact_number}]]></textFieldExpression></textField>
+            <textField isBlankWhenNull="true"><reportElement x="430" y="2" width="50" height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{blood_group}]]></textFieldExpression></textField>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="30">
+            <rectangle><reportElement x="0" y="0" width="535" height="30" backcolor="#ECF0F1"/></rectangle>
+            <staticText><reportElement x="10" y="8" width="120" height="16"/><textElement><font fontName="Arial" size="10" isBold="true"/></textElement><text><![CDATA[Total Patients:]]></text></staticText>
+            <textField><reportElement x="135" y="8" width="60" height="16"/><textElement><font fontName="Arial" size="10" isBold="true"/></textElement><textFieldExpression><![CDATA[$V{totalPatients}]]></textFieldExpression></textField>
+        </band>
+    </summary>
+</jasperReport>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="revenue_report"
+              pageWidth="595" pageHeight="842"
+              columnWidth="535" leftMargin="30" rightMargin="30"
+              topMargin="20" bottomMargin="20"
+              whenNoDataType="AllSectionsNoDetail">
+
+    <queryString>
+        <![CDATA[
+            SELECT p.payment_id, p.payment_date, p.amount, p.payment_method, p.status,
+                   CONCAT(pat.first_name,' ',pat.last_name) AS patient_name,
+                   CONCAT('Dr. ',d.first_name,' ',d.last_name) AS doctor_name
+            FROM payments p
+            JOIN appointments a ON p.appointment_id = a.appointment_id
+            JOIN patients pat ON a.patient_id = pat.patient_id
+            JOIN doctors d ON a.doctor_id = d.doctor_id
+            ORDER BY p.payment_date DESC
+        ]]>
+    </queryString>
+
+    <field name="payment_id"     class="java.lang.Integer"/>
+    <field name="payment_date"   class="java.sql.Date"/>
+    <field name="amount"         class="java.math.BigDecimal"/>
+    <field name="payment_method" class="java.lang.String"/>
+    <field name="status"         class="java.lang.String"/>
+    <field name="patient_name"   class="java.lang.String"/>
+    <field name="doctor_name"    class="java.lang.String"/>
+
+    <variable name="totalRevenue" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[$F{amount}]]></variableExpression>
+        <initialValueExpression><![CDATA[new java.math.BigDecimal("0")]]></initialValueExpression>
+    </variable>
+
+    <title>
+        <band height="60">
+            <rectangle><reportElement x="0" y="0" width="535" height="60" backcolor="#E67E22"/></rectangle>
+            <staticText>
+                <reportElement x="0" y="10" width="535" height="30" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Center"><font fontName="Arial" size="16" isBold="true"/></textElement>
+                <text><![CDATA[REVENUE SUMMARY REPORT]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="40" width="535" height="16" forecolor="#FDEBD0"/>
+                <textElement textAlignment="Center"><font fontName="Arial" size="10"/></textElement>
+                <text><![CDATA[Clinic Management System | EAD-1 Coursework | NIBM 25.1P]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="24">
+            <rectangle><reportElement x="0" y="0" width="535" height="24" backcolor="#2C3E50"/></rectangle>
+            <staticText><reportElement x="0"   y="4" width="30"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[ID]]></text></staticText>
+            <staticText><reportElement x="30"  y="4" width="80"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Date]]></text></staticText>
+            <staticText><reportElement x="110" y="4" width="110" height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Patient]]></text></staticText>
+            <staticText><reportElement x="220" y="4" width="110" height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Doctor]]></text></staticText>
+            <staticText><reportElement x="330" y="4" width="80"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Amount (LKR)]]></text></staticText>
+            <staticText><reportElement x="410" y="4" width="60"  height="16" forecolor="#FFFFFF"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Method]]></text></staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="20">
+            <textField><reportElement x="0"   y="2" width="30"  height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{payment_id}]]></textFieldExpression></textField>
+            <textField><reportElement x="30"  y="2" width="80"  height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{payment_date}]]></textFieldExpression></textField>
+            <textField><reportElement x="110" y="2" width="110" height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{patient_name}]]></textFieldExpression></textField>
+            <textField><reportElement x="220" y="2" width="110" height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{doctor_name}]]></textFieldExpression></textField>
+            <textField><reportElement x="330" y="2" width="80"  height="16"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{amount})]]></textFieldExpression></textField>
+            <textField><reportElement x="410" y="2" width="60"  height="16"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression><![CDATA[$F{payment_method}]]></textFieldExpression></textField>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="40">
+            <rectangle><reportElement x="0" y="0" width="535" height="40" backcolor="#FDEBD0"/></rectangle>
+            <staticText><reportElement x="10" y="12" width="200" height="18"/><textElement><font fontName="Arial" size="11" isBold="true"/></textElement><text><![CDATA[TOTAL REVENUE (LKR):]]></text></staticText>
+            <textField>
+                <reportElement x="220" y="12" width="150" height="18"/>
+                <textElement textAlignment="Right"><font fontName="Arial" size="11" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{totalRevenue})]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>
